@@ -29,4 +29,16 @@ def about(request):
     return render(request,'shop/about.html')
 
 def product_page(request):
-    return HttpResponse('this is product page')
+    return render(request,'shop/product_view.html')
+
+def tracker(request):
+    return render(request,'shop/tracker.html')
+
+def contact_us(request):
+    return render(request,'shop/contact_us.html')
+
+def search(request):
+    return render(request,'shop/search.html')
+
+def checkout(request):
+    return render(request,'shop/checkout.html')
