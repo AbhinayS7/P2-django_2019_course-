@@ -28,8 +28,9 @@ def index(request):
 def about(request):
     return render(request,'shop/about.html')
 
-def product_page(request):
-    return render(request,'shop/product_view.html')
+def product_page(request, myid):
+    product=Product.objects.filter(product_id=myid)
+    return render(request,'shop/product_view.html', {'product':product[0]})
 
 def tracker(request):
     return render(request,'shop/tracker.html')
