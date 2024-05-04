@@ -68,13 +68,16 @@
 
                     {% for i in product %}
                     <div class="col-xs-3 col-sm-3 col-md-3">
-                        <div class="card" style="width: 18rem;">
+                        <div class="card align-items-center" style="width: 18rem;">
                             <img src='/media/{{i.image}}' class="card-img-top" alt="...">
                             <div class="card-body">
                                 <h5 class="card-title">{{i.product_name}}</h5>
                                 <p class="card-text">{{i.desc}}</p>
-                                <button id="pr{{i.product_id}}" class="btn btn-primary cart">Add To Cart</button>
-                                <a href="/shop/product_page/{{i.product_id}}"><button id="qv{{i.id}}" class="btn btn-primary cart">Quick View</button></a>
+                                <span id="divpr{{i.product_id}}" class="divpr">
+                                    <button id="pr{{i.product_id}}" class="btn btn-primary cart">Add To Cart</button>
+                                </span>
+                                <a href="/shop/product_page/{{i.product_id}}"><button id="qv{{i.id}}"
+                                        class="btn btn-primary cart">Quick View</button></a>
                             </div>
                         </div>
                     </div>
@@ -120,6 +123,7 @@
         else {
             cart[idstr] = 1;
         }
+        updateCart(cart);
         console.log(cart);
         localStorage.setItem('cart', JSON.stringify(cart));
         document.getElementById('cart').innerHTML = Object.keys(cart).length;
@@ -127,5 +131,31 @@
 
     $('#popcart').popover()
     document.getElementById("popcart").setAttribute('data-content', '<h5>Cart for your items in my shopping cart</h5>');
+
+    function updateCart(cart) {
+        for (var item in cart) {
+            document.getElementById('div' + item).innerHTML = "<button id='minus" + item + "' class='btn btn-primary minus'>-</button> <span id='val" + item + "''>" + cart[item] + "</span> <button id='plus" + item + "' class='btn btn-primary plus'> + </button>";
+        }
+        localStorage.setItem('cart', JSON.stringify(cart));
+        document.getElementById('cart').innerHTML = Object.keys(cart).length;
+        console.log(cart);
+    }
+
+    // If plus or minus button is clicked, change the cart as well as the display value
+    $('.divpr').on("click", "button.minus", function () {
+        a = this.id.slice(7,);
+        cart['pr' + a] = cart['pr' + a] - 1;
+        cart['pr' + a] = Math.max(0, cart['pr' + a]);
+        document.getElementById('valpr' + a).innerHTML = cart['pr' + a];
+        updateCart(cart);
+    });
+    $('.divpr').on("click", "button.plus", function () {
+        a = this.id.slice(6,);
+        cart['pr' + a] = cart['pr' + a] + 1;
+        document.getElementById('valpr' + a).innerHTML = cart['pr' + a];
+        updateCart(cart);
+    });
+
+
 </script>
 {% endblock %}
