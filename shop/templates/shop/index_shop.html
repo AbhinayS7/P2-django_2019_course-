@@ -114,7 +114,8 @@
         cart = JSON.parse(localStorage.getItem('cart'));
         updateCart(cart);
     }
-    $('.cart').click(function () {
+    // $('.cart').click(function () {
+    $('.divpr').on('click', 'button.cart', function(){
         var idstr = this.id.toString();
         console.log(idstr);
         if (cart[idstr] != undefined) {
@@ -166,7 +167,7 @@
             popStr = popStr + document.getElementById('name' + item).innerHTML.slice(0, 19) + "... Qty: " + cart[item] + '<br>';
             i = i + 1;
         }
-        popStr = popStr + "</div>"
+        popStr = popStr + "</div> <a href='/shop/checkout'><button class='btn btn-primary' id ='checkout'>Checkout</button></a> <button class='btn btn-primary' onclick='clearCart()' id ='clearCart'>Clear Cart</button>"
         document.getElementById('popcart').setAttribute('data-content', popStr);
         $('#popcart').popover('show');
     }
@@ -179,5 +180,14 @@
         return products
     }
 
+    function clearCart() {
+    cart = JSON.parse(localStorage.getItem('cart'));
+    for (var item in cart) {
+        document.getElementById('div' + item).innerHTML = '<button id="' + item + '" class="btn btn-primary cart">Add To Cart</button>'
+    }
+    localStorage.clear();
+    cart = {};
+    updateCart(cart);
+}
 </script>
 {% endblock %}
