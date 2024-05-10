@@ -56,7 +56,7 @@ ROOT_URLCONF = 'mycart.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['mycart/mycart/templates'],
+        'DIRS': ['mycart/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
