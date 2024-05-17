@@ -5,6 +5,11 @@ from math import ceil
 import json
 # Create your views here.
 
+def searchMatch(query, item):
+    if query.lower() in item.product_name.lower() or query.lower() in item.category.lower() or query.lower() in item.desc.lower():
+        return True
+    else:
+        return False
 
 def index(request):
     products = Product.objects.all()
@@ -67,7 +72,21 @@ def contact_us(request):
     return render(request,'shop/contact_us.html',{'thank':thank})
 
 def search(request):
-    return render(request,'shop/search.html')
+    query= request.GET.get('search')
+    allProds = []
+    catprods = Product.objects.values('category', 'product_id')
+    cats = {item['category'] for item in catprods}
+    for cat in cats:
+        prodtemp = Product.objects.filter(category=cat)
+        prod=[item for item in prodtemp if searchMatch(query, item)]
+        n = len(prod)
+        nSlides = n // 4 + ceil((n / 4) - (n // 4))
+        if len(prod)!= 0:
+            allProds.append([prod, range(1, nSlides), nSlides])
+    params = {'allProds': allProds, "msg":""}
+    if len(allProds)==0 or len(query)<4:
+        params={'msg':"Please make sure to enter relevant search query"}
+    return render(request, 'shop/search.html', params)
 
 def checkout(request):
     if request.method == 'POST':
